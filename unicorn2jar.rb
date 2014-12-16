@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#Use: unicorn2vba.rb unicornOutputFileHere
+#Use: unicorn2jar.rb unicornOutputFileHere jarFileNameHere
 def usage
 	puts "ruby unicorn2jar.rb unicornOutputFileHere jarFileNameHere" 
 end
